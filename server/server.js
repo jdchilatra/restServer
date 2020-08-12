@@ -1,39 +1,21 @@
 const express = require("express");
-const bodyParser = require("body-parser");
+const mongoose = require("mongoose");
+
 require("./config/config");
 
-const app = express();
+const app = require("./routes/usuario");
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
- 
-// parse application/json
-app.use(bodyParser.json())
 
-app.get("/usuario", (req,res) => {
-    res.json("get usuario");
+
+
+
+mongoose.connect(process.env.URLDB,
+                    {useCreateIndex:true, useCreateIndex:true}
+                    , (err,res) => {
+    if (err) throw err;
+
+    console.log("conectado");
 })
-
-app.post("/usuario", (req,res) => {
-    let body = req.body;
-    res.json({
-        persona:body
-    });
-})
-
-app.put("/usuario/:id", (req,res) => {
-    let id=req.params.id;
-
-    res.json({
-        id
-    });
-    
-})
-
-app.delete("/usuario", (req,res) => {
-    res.json("delete usuario");
-})
-
 
 app.listen(process.env.PORT,() => {
     console.log("escuchando p 3000")
