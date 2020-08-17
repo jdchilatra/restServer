@@ -6,6 +6,8 @@ process.env.PORT = process.env.PORT || 3000
 process.env.NODE_ENV = process.env.NODE_ENV || "dev"
 //se obtiene el entorno
 
+
+//-------Base de datos------//
 let urlDB
 
 if (process.env.NODE_ENV == "dev"){
@@ -16,3 +18,15 @@ else{
 }
 
 process.env.URLDB= urlDB; 
+//-----------Fin base de datos-------------//
+
+//----Vencimiento del token-------//
+//60sg*60min*24h*30d
+process.env.CADUCIDAD_TOKEN=60*60*24*30;
+//----//
+
+
+//--SEMILLA---//
+process.env.SEED = process.env.SEED || "este-es-el-seed-desarrollo"
+
+//---fin semilla

@@ -4,6 +4,7 @@ const bcrypt = require("bcrypt");
 const _ = require("underscore");
 
 const Usuario = require("../models/usuario.js");
+const { verificaToken, verificaAdminRole } = require("../middlewares/autenticacion.js");
 
 const app = express();
 
@@ -14,7 +15,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
 
 
-app.get("/usuario", (req,res) => {
+app.get("/usuario", verificaToken ,(req,res) => {
     let desde = req.query.desde || 0;
     let limite = req.query.limite || 5;
     let estado ={estado:true}
@@ -45,7 +46,7 @@ app.get("/usuario", (req,res) => {
     })
 })
 
-app.post("/usuario", (req,res) => {
+app.post("/usuario",verificaToken , (req,res) => {
     let body = req.body;
     let usuario = new Usuario({
         nombre:body.nombre,
@@ -68,7 +69,7 @@ app.post("/usuario", (req,res) => {
     })
 })
 
-app.put("/usuario/:id", (req,res) => {
+app.put("/usuario/:id",[verificaToken, verificaAdminRole] , (req,res) => {
     let id=req.params.id;
     let body = _.pick(req.body,["nombre","email","img","role","estado"]) ;
     let options = {
@@ -91,7 +92,7 @@ app.put("/usuario/:id", (req,res) => {
     
 })
 
-app.delete("/usuario/:id", (req,res) => { //Cambia el estado de la bandera a false
+app.delete("/usuario/:id",[verificaToken, verificaAdminRole] , (req,res) => { //Cambia el estado de la bandera a false
     let id = req.params.id;
     let estado = {
         estado:false
